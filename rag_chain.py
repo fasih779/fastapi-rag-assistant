@@ -14,9 +14,12 @@ def format_docs(docs):
     return "\n\n".join(doc.page_content for doc in docs)
 
 class RAGChain:
-    def __init__(self, model_name="llama-3.3-70b-versatile"):
+    def __init__(self, model_name="llama-3.3-70b-versatile", collection_name="fastapi_codebase"):
         self.embedder = EmbeddingModel()
-        self.store = QdrantStore(embedding_model=self.embedder.get_model())
+        self.store = QdrantStore(
+            embedding_model=self.embedder.get_model(),
+            collection_name=collection_name
+        )
         self.retriever = self.store.get_retriever(k=8, search_type="similarity")
         
         self.llm = ChatGroq(
